@@ -1,247 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XFOR | Super Premium Gaming Profile</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XFOR | Gaming Profile</title>
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-}
+  <!--
+    Page written manually for XFOR
+    Static profile – clean & premium look
+  -->
 
-/* ===== BACKGROUND FULL IMAGE + ANIMATION ===== */
-body{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background: url("xa88.jpeg") center/cover no-repeat fixed;
-  position:relative;
-  color:#fff;
-  overflow:hidden;
-}
+  <style>
+    /* ================= BASIC RESET ================= */
+    *,
+    *::before,
+    *::after{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    }
 
-body::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: rgba(0,0,0,0.3);
-  z-index:0;
-  animation: overlayGlow 12s ease-in-out infinite alternate;
-}
+    /* ================= BODY / BACKGROUND ================= */
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:url("xa88.jpeg") center / cover no-repeat fixed;
+      color:#ffffff;
+      position:relative;
+      overflow:hidden;
+    }
 
-@keyframes overlayGlow{
-  0%{background: rgba(0,0,0,0.25);}
-  50%{background: rgba(0,0,0,0.35);}
-  100%{background: rgba(0,0,0,0.25);}
-}
+    /* Dark cinematic overlay */
+    body::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,.35);
+      z-index:0;
+    }
 
-/* ===== CARD ===== */
-.container{
-  position:relative;
-  z-index:2;
-  width:100%;
-  max-width:450px;
-  padding:36px;
-  text-align:center;
-  border-radius:24px;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(16px);
-  border:1px solid rgba(0,255,204,0.3);
-  box-shadow: 0 0 40px rgba(0,255,204,0.4),0 0 70px rgba(127,0,255,0.25);
-  animation: cardIn 1s ease;
-}
+    /* ================= FIREWORK / LIGHT EFFECT ================= */
+    .effects{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+    }
 
-@keyframes cardIn{
-  from{opacity:0; transform:translateY(50px) scale(.95);}
-  to{opacity:1; transform:none;}
-}
+    .spark{
+      position:absolute;
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:#00ffcc;
+      box-shadow:0 0 14px currentColor;
+      animation: rise 6s linear infinite;
+    }
 
-/* ===== PROFILE BADGE ===== */
-.profile-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 22px;
-  border-radius:30px;
-  background:linear-gradient(135deg,#00ffcc,#7f00ff);
-  color:#000;
-  font-size:14px;
-  font-weight:800;
-  margin-bottom:18px;
-  box-shadow:0 0 20px rgba(0,255,204,.7);
-  animation: badgeGlow 2s ease-in-out infinite alternate;
-}
+    @keyframes rise{
+      from{
+        transform:translateY(110vh) scale(1);
+        opacity:1;
+      }
+      to{
+        transform:translateY(-20vh) scale(.3);
+        opacity:0;
+      }
+    }
 
-@keyframes badgeGlow{
-  0%{box-shadow:0 0 15px rgba(0,255,204,.5);}
-  50%{box-shadow:0 0 25px rgba(127,0,255,.7);}
-  100%{box-shadow:0 0 15px rgba(0,255,204,.5);}
-}
+    /* ================= MAIN CARD ================= */
+    .profile-card{
+      position:relative;
+      z-index:2;
+      width:100%;
+      max-width:460px;
+      padding:38px 34px;
+      border-radius:26px;
+      text-align:center;
+      background:rgba(0,0,0,.58);
+      backdrop-filter:blur(18px);
+      border:1px solid rgba(0,255,204,.35);
+      box-shadow:
+        0 0 40px rgba(0,255,204,.35),
+        0 0 80px rgba(127,0,255,.25);
+      animation: appear .9s ease;
+    }
 
-/* ===== AVATAR FLOATING ===== */
-.avatar{
-  width:130px;
-  height:130px;
-  border-radius:50%;
-  border:4px solid #00ffcc;
-  object-fit:cover;
-  margin-bottom:16px;
-  box-shadow:0 0 25px rgba(0,255,204,0.9),0 0 50px rgba(127,0,255,0.6);
-  animation: floatAvatar 3s ease-in-out infinite;
-}
+    @keyframes appear{
+      from{opacity:0; transform:translateY(40px) scale(.96);}
+      to{opacity:1; transform:none;}
+    }
 
-@keyframes floatAvatar{
-  0%,100%{transform:translateY(0px);}
-  50%{transform:translateY(-12px);}
-}
+    /* ================= BADGE ================= */
+    .status{
+      display:inline-block;
+      padding:8px 22px;
+      margin-bottom:18px;
+      font-size:14px;
+      font-weight:800;
+      border-radius:30px;
+      background:linear-gradient(135deg,#00ffcc,#7f00ff);
+      color:#000;
+      box-shadow:0 0 20px rgba(0,255,204,.7);
+    }
 
-/* ===== XFOR TITLE ===== */
-h1{
-  font-size:36px;
-  letter-spacing:3px;
-  margin-bottom:6px;
-  text-shadow: 0 0 12px #00ffcc, 0 0 25px #7f00ff;
-  animation: titleGlow 2.5s ease-in-out infinite alternate;
-}
+    /* ================= AVATAR ================= */
+    .avatar{
+      width:130px;
+      height:130px;
+      border-radius:50%;
+      border:4px solid #00ffcc;
+      object-fit:cover;
+      margin-bottom:16px;
+      box-shadow:
+        0 0 25px rgba(0,255,204,.9),
+        0 0 50px rgba(127,0,255,.6);
+      animation: float 3s ease-in-out infinite;
+    }
 
-@keyframes titleGlow{
-  0%{text-shadow:0 0 12px #00ffcc,0 0 25px #7f00ff;}
-  50%{text-shadow:0 0 18px #00ffcc,0 0 40px #7f00ff;}
-  100%{text-shadow:0 0 12px #00ffcc,0 0 25px #7f00ff;}
-}
+    @keyframes float{
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-12px);}
+    }
 
-/* ===== BIO ===== */
-.bio{
-  font-size:14px;
-  opacity:.9;
-  margin-bottom:28px;
-}
+    /* ================= TEXT ================= */
+    h1{
+      font-size:36px;
+      letter-spacing:3px;
+      margin-bottom:6px;
+      text-shadow:
+        0 0 14px #00ffcc,
+        0 0 30px #7f00ff;
+    }
 
-/* ===== LINKS ===== */
-.links{
-  margin-top:20px;
-}
+    .subtitle{
+      font-size:14px;
+      opacity:.9;
+      margin-bottom:28px;
+    }
 
-.links a{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  background:rgba(255,255,255,.95);
-  color:#111;
-  text-decoration:none;
-  padding:15px 20px;
-  margin:14px 0;
-  border-radius:35px;
-  font-weight:700;
-  position:relative;
-  overflow:hidden;
-  transition:.35s;
-}
+    /* ================= LINKS ================= */
+    .socials a{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:15px 20px;
+      margin:14px 0;
+      border-radius:40px;
+      background:rgba(255,255,255,.95);
+      color:#111;
+      text-decoration:none;
+      font-weight:700;
+      position:relative;
+      overflow:hidden;
+      transition:.35s;
+    }
 
-.links a img{
-  width:28px;
-  height:28px;
-}
+    .socials a img{
+      width:28px;
+      height:28px;
+    }
 
-.links a::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(120deg,transparent,rgba(0,255,204,.35),transparent);
-  transform:translateX(-100%);
-}
+    .socials a::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(0,255,204,.4),
+        transparent
+      );
+      transform:translateX(-100%);
+    }
 
-.links a:hover::before{
-  transform:translateX(100%);
-  transition:.6s;
-}
+    .socials a:hover::before{
+      transform:translateX(100%);
+      transition:.6s;
+    }
 
-.links a:hover{
-  transform:scale(1.08);
-  box-shadow:0 0 35px rgba(0,255,204,0.8),0 0 50px rgba(127,0,255,0.5);
-  cursor:pointer;
-}
+    .socials a:hover{
+      transform:scale(1.08);
+      box-shadow:
+        0 0 35px rgba(0,255,204,.8),
+        0 0 60px rgba(127,0,255,.5);
+    }
 
-/* ===== FOOTER ===== */
-footer{
-  margin-top:26px;
-  font-size:12px;
-  opacity:.7;
-  letter-spacing:1px;
-}
+    /* ================= FOOTER ================= */
+    footer{
+      margin-top:26px;
+      font-size:12px;
+      opacity:.7;
+      letter-spacing:1px;
+    }
 
-/* ===== MOBILE ===== */
-@media(max-width:480px){
-  h1{font-size:28px;}
-  .avatar{width:100px;height:100px;}
-}
-</style>
+    /* ================= MOBILE ================= */
+    @media(max-width:480px){
+      h1{font-size:28px;}
+      .avatar{width:100px;height:100px;}
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- AUDIO HOVER EFFECT -->
-<audio id="hoverSound" src="1995.mp3" preload="auto"></audio>
+  <!-- LIGHT EFFECT LAYER -->
+  <div class="effects" id="effects"></div>
 
-<div class="container">
+  <!-- HOVER SOUND -->
+  <audio id="hoverSound" src="1995.mp3" preload="auto"></audio>
 
-  <!-- PROFILE BADGE -->
-  <div class="profile-badge">🔥 PRO GAMER</div>
+  <main class="profile-card">
 
-  <!-- AVATAR -->
-  <img src="xa88.jpeg" class="avatar" alt="XFOR Logo">
+    <div class="status">🔥 PRO GAMER</div>
 
-  <h1>XFOR</h1>
-  <p class="bio">Gaming • Streaming • Content Creator</p>
+    <img src="xa88.jpeg" alt="XFOR Avatar" class="avatar">
 
-  <div class="links">
-    <a href="https://www.youtube.com/@xfor.tiktok" target="_blank">
-      <img src="https://cdn.simpleicons.org/youtube/FF0000"> YouTube
-    </a>
+    <h1>XFOR</h1>
+    <p class="subtitle">Gaming • Streaming • Content Creator</p>
 
-    <a href="https://kick.com/XFORTV" target="_blank">
-      <img src="https://cdn.simpleicons.org/kick/00FF6A"> Kick
-    </a>
+    <div class="socials">
+      <a href="https://www.youtube.com/@xfor.tiktok" target="_blank">
+        <img src="https://cdn.simpleicons.org/youtube/FF0000"> YouTube
+      </a>
 
-    <a href="https://www.tiktok.com/@xfor.ff" target="_blank">
-      <img src="https://cdn.simpleicons.org/tiktok/000000"> TikTok
-    </a>
+      <a href="https://kick.com/XFORTV" target="_blank">
+        <img src="https://cdn.simpleicons.org/kick/00FF6A"> Kick
+      </a>
 
-    <a href="https://www.instagram.com/boubaker_karoui" target="_blank">
-      <img src="https://cdn.simpleicons.org/instagram/E1306C"> Instagram
-    </a>
+      <a href="https://www.tiktok.com/@xfor.ff" target="_blank">
+        <img src="https://cdn.simpleicons.org/tiktok/000000"> TikTok
+      </a>
 
-    <a href="https://www.instagram.com/channel/AbZgaKHNJb4UfK5r/" target="_blank">
-      <img src="https://cdn.simpleicons.org/instagram/E1306C"> Group Instagram
-    </a>
+      <a href="https://www.instagram.com/boubaker_karoui" target="_blank">
+        <img src="https://cdn.simpleicons.org/instagram/E1306C"> Instagram
+      </a>
 
-    <!-- Discord Link -->
-    <a href="https://discord.gg/FQzf4AME9" target="_blank">
-      <img src="https://cdn.simpleicons.org/discord/5865F2"> Discord
-    </a>
-  </div>
+      <a href="https://www.instagram.com/channel/AbZgaKHNJb4UfK5r/" target="_blank">
+        <img src="https://cdn.simpleicons.org/instagram/E1306C"> Instagram Group
+      </a>
 
-  <footer>© 2026 • XFOR Gaming Premium</footer>
+      <a href="https://discord.gg/FQzf4AME9" target="_blank">
+        <img src="https://cdn.simpleicons.org/discord/5865F2"> Discord
+      </a>
+    </div>
 
-</div>
+    <footer>© 2026 • XFOR Gaming</footer>
 
-<script>
-  // Play hover sound on links
-  const hoverSound = document.getElementById("hoverSound");
-  const links = document.querySelectorAll(".links a");
+  </main>
 
-  links.forEach(link => {
-    link.addEventListener("mouseenter", () => {
-      hoverSound.currentTime = 0;
-      hoverSound.play();
+  <script>
+    /* Hover sound */
+    const sound = document.getElementById("hoverSound");
+    document.querySelectorAll(".socials a").forEach(link=>{
+      link.addEventListener("mouseenter",()=>{
+        sound.currentTime = 0;
+        sound.play();
+      });
     });
-  });
-</script>
+
+    /* Generate light sparks (firework vibe) */
+    const layer = document.getElementById("effects");
+    for(let i=0;i<40;i++){
+      const s = document.createElement("div");
+      s.className = "spark";
+      s.style.left = Math.random()*100 + "%";
+      s.style.animationDelay = Math.random()*6 + "s";
+      s.style.color = Math.random() > .5 ? "#00ffcc" : "#7f00ff";
+      layer.appendChild(s);
+    }
+
+    /* Light anti-inspection annoyance (not real security) */
+    document.addEventListener("contextmenu",e=>e.preventDefault());
+    document.addEventListener("keydown",e=>{
+      if(e.key==="F12" || (e.ctrlKey && e.shiftKey)){
+        e.preventDefault();
+      }
+    });
+  </script>
 
 </body>
 </html>
