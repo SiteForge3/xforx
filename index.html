@@ -28,7 +28,6 @@
       overflow:hidden;
     }
 
-    /* Dark cinematic overlay */
     body::after{
       content:"";
       position:absolute;
@@ -192,20 +191,19 @@
       letter-spacing:1px;
     }
 
-    /* ================= TOP-RIGHT VIDEO ================= */
+    /* ================= VIDEO (MODIFIED ONLY HERE) ================= */
     .corner-video{
       position:fixed;
-      top:18px;        /* أعلى الصفحة */
-      right:18px;
-      width:200px;     /* مربع */
-      height:200px;    /* مربع */
+      bottom:16px;
+      left:16px;
+      width:160px;
+      aspect-ratio:1/1;
       border-radius:18px;
       overflow:hidden;
-      z-index:3;
-      border:2px solid rgba(0,255,204,.8);
-      box-shadow:
-        0 0 25px rgba(0,255,204,.7),
-        0 0 50px rgba(127,0,255,.5);
+      z-index:1;
+      opacity:.75;
+      border:1px solid rgba(0,255,204,.6);
+      box-shadow:0 0 20px rgba(0,255,204,.4);
     }
 
     .corner-video video{
@@ -214,15 +212,12 @@
       object-fit:cover;
     }
 
-    /* ================= MOBILE ================= */
     @media(max-width:480px){
-      h1{font-size:28px;}
-      .avatar{width:100px;height:100px;}
       .corner-video{
-        width:140px;
-        height:140px;
-        top:12px;
-        right:12px;
+        width:110px;
+        bottom:10px;
+        left:10px;
+        opacity:.65;
       }
     }
   </style>
@@ -230,18 +225,13 @@
 
 <body>
 
-  <!-- LIGHT EFFECT LAYER -->
   <div class="effects" id="effects"></div>
 
-  <!-- HOVER SOUND -->
   <audio id="hoverSound" src="1995.mp3" preload="auto"></audio>
 
   <main class="profile-card">
-
     <div class="status">🔥 PRO GAMER</div>
-
     <img src="xa88.jpeg" alt="XFOR Avatar" class="avatar">
-
     <h1>XFOR</h1>
     <p class="subtitle">Gaming • Streaming • Content Creator</p>
 
@@ -249,39 +239,31 @@
       <a href="https://www.youtube.com/@xfor.tiktok" target="_blank">
         <img src="https://cdn.simpleicons.org/youtube/FF0000"> YouTube
       </a>
-
       <a href="https://kick.com/XFORTV" target="_blank">
         <img src="https://cdn.simpleicons.org/kick/00FF6A"> Kick
       </a>
-
       <a href="https://www.tiktok.com/@xfor.ff" target="_blank">
         <img src="https://cdn.simpleicons.org/tiktok/000000"> TikTok
       </a>
-
       <a href="https://www.instagram.com/boubaker_karoui" target="_blank">
         <img src="https://cdn.simpleicons.org/instagram/E1306C"> Instagram
       </a>
-
-      <a href="https://www.instagram.com/channel/AbZgaKHNJb4UfK5r/" target="_blank">
-        <img src="https://cdn.simpleicons.org/instagram/E1306C"> Instagram Group
-      </a>
-
       <a href="https://discord.gg/FQzf4AME9" target="_blank">
         <img src="https://cdn.simpleicons.org/discord/5865F2"> Discord
       </a>
     </div>
 
     <footer>© 2026 • XFOR Gaming</footer>
-
   </main>
 
-  <!-- TOP-RIGHT VIDEO -->
+  <!-- VIDEO -->
   <div class="corner-video">
-    <video src="Xf20.mp4" autoplay muted loop playsinline></video>
+    <video id="cornerVideo" muted loop playsinline preload="auto" poster="xa88.jpeg">
+      <source src="Xf20.mp4" type="video/mp4">
+    </video>
   </div>
 
   <script>
-    /* Hover sound */
     const sound = document.getElementById("hoverSound");
     document.querySelectorAll(".socials a").forEach(link=>{
       link.addEventListener("mouseenter",()=>{
@@ -290,7 +272,6 @@
       });
     });
 
-    /* Generate light sparks (firework vibe) */
     const layer = document.getElementById("effects");
     for(let i=0;i<40;i++){
       const s = document.createElement("div");
@@ -301,7 +282,16 @@
       layer.appendChild(s);
     }
 
-    /* Light anti-inspection annoyance (not real security) */
+    const v = document.getElementById("cornerVideo");
+    window.addEventListener("load",()=>{
+      const p = v.play();
+      if(p !== undefined){
+        p.catch(()=>{
+          document.addEventListener("click",()=>v.play(),{once:true});
+        });
+      }
+    });
+
     document.addEventListener("contextmenu",e=>e.preventDefault());
     document.addEventListener("keydown",e=>{
       if(e.key==="F12" || (e.ctrlKey && e.shiftKey)){
