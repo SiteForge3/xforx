@@ -3,238 +3,484 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>XFOR | Gaming Profile</title>
+  <title>XFOR | 3D Streamer Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;500;700;800&family=Tourney:wght@700&display=swap" rel="stylesheet">
 
   <style>
-    *,
-    *::before,
-    *::after{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    :root {
+      --accent: #00f3ff;
+      --accent-alt: #ff0055;
+      --dark: #050505;
+      --glass: rgba(20, 20, 20, 0.85);
+      --border: rgba(255, 255, 255, 0.1);
     }
 
-    html,body{
-      width:100%;
-      min-height:100dvh;
-      overflow-x:hidden;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    body{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:url("xa88.jpeg") center/cover no-repeat fixed;
-      color:#ffffff;
-      position:relative;
-      padding:20px 12px; /* 👈 يمنع القص من الحواف */
+    body {
+      background-color: var(--dark);
+      color: #fff;
+      font-family: 'Sora', sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+      /* مهم لتأثير المنظور (Perspective) */
+      perspective: 1000px; 
     }
 
-    body::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:rgba(0,0,0,.35);
-      z-index:0;
+    /* Background Animation */
+    .bg-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 243, 255, 0.15) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      animation: pulseGlow 4s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    
+    .bg-glow-2 {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255, 0, 85, 0.1) 0%, transparent 70%);
+      top: 0;
+      right: 0;
+      z-index: 0;
+      pointer-events: none;
     }
 
-    /* Effects */
-    .effects{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      z-index:1;
+    @keyframes pulseGlow {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
     }
 
-    .spark{
-      position:absolute;
-      width:6px;
-      height:6px;
-      border-radius:50%;
-      background:#00ffcc;
-      box-shadow:0 0 14px currentColor;
-      animation: rise 6s linear infinite;
+    /* Main Card - 3D Container */
+    .stream-card {
+      position: relative;
+      width: 100%;
+      max-width: 380px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 25px;
+      z-index: 2;
+      box-shadow: 
+        0 20px 50px rgba(0,0,0,0.5),
+        0 0 30px rgba(0, 243, 255, 0.1); /* ظل أزرق خفيف */
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      overflow: hidden;
+      
+      /* إعدادات التحويل ثلاثي الأبعاد */
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      will-change: transform;
     }
 
-    @keyframes rise{
-      from{transform:translateY(110vh) scale(1);opacity:1;}
-      to{transform:translateY(-20vh) scale(.3);opacity:0;}
+    /* Top HUD Line */
+    .hud-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+      box-shadow: 0 0 15px var(--accent);
+      /* إعطاء عمق للخط العلوي */
+      transform: translateZ(30px);
     }
 
-    /* Card */
-    .profile-card{
-      position:relative;
-      z-index:2;
-      width:100%;
-      max-width:460px;
-      padding:36px 26px;
-      border-radius:26px;
-      text-align:center;
-      background:rgba(0,0,0,.58);
-      backdrop-filter:blur(18px);
-      border:1px solid rgba(0,255,204,.35);
-      box-shadow:
-        0 0 40px rgba(0,255,204,.35),
-        0 0 80px rgba(127,0,255,.25);
-      animation: appear .9s ease;
+    /* Live Status */
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 0 5px;
+      transform: translateZ(20px); /* إخراج العنصر للأمام */
     }
 
-    @keyframes appear{
-      from{opacity:0; transform:translateY(40px) scale(.96);}
-      to{opacity:1; transform:none;}
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 0, 85, 0.2);
+      border: 1px solid var(--accent-alt);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-alt);
+      box-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
     }
 
-    .status{
-      display:inline-block;
-      padding:8px 22px;
-      margin-bottom:18px;
-      font-size:14px;
-      font-weight:800;
-      border-radius:30px;
-      background:linear-gradient(135deg,#00ffcc,#7f00ff);
-      color:#000;
-      box-shadow:0 0 20px rgba(0,255,204,.7);
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-alt);
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
     }
 
-    .avatar{
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      border:4px solid #00ffcc;
-      object-fit:cover;
-      margin-bottom:16px;
-      box-shadow:0 0 25px rgba(0,255,204,.9),0 0 50px rgba(127,0,255,.6);
-      animation: float 3s ease-in-out infinite;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
-    @keyframes float{
-      0%,100%{transform:translateY(0);}
-      50%{transform:translateY(-12px);}
+    .viewer-count {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
     }
 
-    h1{
-      font-size:32px;
-      letter-spacing:3px;
-      margin-bottom:6px;
-      text-shadow:0 0 14px #00ffcc,0 0 30px #7f00ff;
+    /* Profile Section */
+    .profile-section {
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
     }
 
-    .subtitle{
-      font-size:14px;
-      opacity:.9;
-      margin-bottom:20px;
+    .avatar-frame {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 15px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* إخراج الصورة بشكل أكبر لإعطاء تأثير الطفو */
+      transform: translateZ(50px); 
     }
 
-    /* 🎧 FATIHA BUTTON */
-    .quran-btn{
-      margin:10px auto 22px;
-      padding:10px 22px;
-      border-radius:30px;
-      background:linear-gradient(135deg,#00ffcc,#7f00ff);
-      color:#000;
-      font-weight:700;
-      cursor:pointer;
-      display:inline-block;
-      box-shadow:0 0 15px rgba(0,255,204,.7);
-      transition:.3s;
+    .avatar-ring {
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent), var(--accent-alt), var(--accent));
+      animation: spin 4s linear infinite;
+      z-index: -1;
+      box-shadow: 0 10px 30px rgba(0, 243, 255, 0.4);
+    }
+    
+    /* Cutter effect for ring */
+    .avatar-ring::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      background: var(--dark);
+      border-radius: 50%;
     }
 
-    .quran-btn:hover{
-      transform:scale(1.07);
-      box-shadow:0 0 25px rgba(0,255,204,.9);
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--dark);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
     }
 
-    .socials a{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:14px 18px;
-      margin:12px 0;
-      border-radius:40px;
-      background:#fff;
-      color:#111;
-      text-decoration:none;
-      font-weight:700;
-      transition:.35s;
+    .username {
+      font-family: 'Tourney', cursive;
+      font-size: 32px;
+      color: #fff;
+      text-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+      margin-bottom: 5px;
+      letter-spacing: 2px;
+      transform: translateZ(30px); /* اسم بارز */
     }
 
-    .socials a img{
-      width:26px;
-      height:26px;
+    .user-tag {
+      font-size: 13px;
+      color: var(--accent);
+      background: rgba(0, 243, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      transform: translateZ(20px);
     }
 
-    .socials a:hover{
-      transform:scale(1.07);
-      box-shadow:0 0 30px rgba(0,255,204,.8);
+    /* Action Buttons */
+    .stream-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+      transform: translateZ(15px);
     }
 
-    footer{
-      margin-top:22px;
-      font-size:12px;
-      opacity:.7;
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 10px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid transparent;
     }
 
-    @media(max-width:480px){
-      h1{font-size:26px;}
-      .avatar{width:100px;height:100px;}
-      .profile-card{padding:28px 18px;}
+    /* Primary Buttons */
+    .btn-primary {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    
+    .btn-primary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent);
+      transform: translateZ(10px) translateY(-3px); /* حركة للأمام والأعلى */
+    }
+
+    /* Donate Button */
+    .btn-donate {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(255, 0, 85, 0.2), rgba(255, 0, 85, 0.05));
+      border: 1px solid var(--accent-alt);
+      color: #fff;
+      flex-direction: row;
+      gap: 10px;
+    }
+
+    .btn-donate:hover {
+      box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
+      transform: translateZ(10px) scale(1.02);
+    }
+
+    .action-btn img {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 5px;
+    }
+    .btn-donate img { margin-bottom: 0; width: 20px; height: 20px; }
+
+    /* Social Links */
+    .social-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transform: translateZ(10px);
+    }
+
+    .social-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ccc;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+
+    .social-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: #fff;
+      padding-left: 20px;
+    }
+
+    .social-item img {
+      width: 18px;
+      height: 18px;
+      margin-right: 12px;
+      opacity: 0.7;
+    }
+    
+    .social-item:hover img { opacity: 1; }
+
+    /* Quran Button */
+    .quran-footer {
+      margin-top: 20px;
+      text-align: center;
+      transform: translateZ(15px);
+    }
+
+    .btn-quran {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      background: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-quran:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    }
+
+    /* Responsive & Mobile Optimization */
+    @media (max-width: 600px) {
+      /* تعطيل تأثير 3D على الجوال لضمان الأداء وسهولة الاستخدام */
+      .stream-card {
+        transform: none !important;
+      }
+      .hud-line, .status-header, .avatar-frame, .username, .user-tag, .stream-btns, .social-list, .quran-footer {
+        transform: none !important;
+      }
+      
+      /* تعديلات الحجم */
+      .stream-card { padding: 20px; }
+      .username { font-size: 26px; }
+      .action-btn { padding: 12px 5px; font-size: 12px; }
     }
   </style>
 </head>
-
 <body>
 
-<div class="effects" id="effects"></div>
+<!-- Ambient Background -->
+<div class="bg-glow"></div>
+<div class="bg-glow-2"></div>
 
-<audio id="fatihaAudio" src="001 (1).mp3"></audio>
+<audio id="fatihaAudio" src="001 (1).mp3" preload="auto"></audio>
 <audio id="hoverSound" src="1995.mp3" preload="auto"></audio>
 
-<main class="profile-card">
-  <div class="status">🔥 PRO GAMER</div>
-  <img src="xa88.jpeg" alt="XFOR Avatar" class="avatar">
-
-  <h1>XFOR</h1>
-  <p class="subtitle">Gaming • Streaming • Content Creator</p>
-
-  <!-- 🎧 SURAH AL-FATIHA BUTTON -->
-  <div class="quran-btn" onclick="playFatiha()">🔊 Play Surah Al-Fatiha</div>
-
-  <div class="socials">
-    <a href="https://www.youtube.com/@xfor.tiktok" target="_blank"><img src="https://cdn.simpleicons.org/youtube/FF0000">YouTube</a>
-    <a href="https://kick.com/XFORTV" target="_blank"><img src="https://cdn.simpleicons.org/kick/00FF6A">Kick</a>
-    <a href="https://www.tiktok.com/@xfor.ff" target="_blank"><img src="https://cdn.simpleicons.org/tiktok/000000">TikTok</a>
-    <a href="https://www.instagram.com/boubaker_karoui" target="_blank"><img src="https://cdn.simpleicons.org/instagram/E1306C">Instagram</a>
-    <a href="https://www.instagram.com/channel/AbZgaKHNJb4UfK5r/" target="_blank"><img src="https://cdn.simpleicons.org/instagram/E1306C">Instagram Group</a>
-    <a href="https://discord.gg/FQzf4AME9" target="_blank"><img src="https://cdn.simpleicons.org/discord/5865F2">Discord</a>
+<div class="stream-card" id="card">
+  <div class="hud-line"></div>
+  
+  <!-- Header -->
+  <div class="status-header">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span>LIVE</span>
+    </div>
+    <div class="viewer-count">Watching: 1.2K</div>
   </div>
 
-  <footer>© 2026 • XFOR Gaming</footer>
-</main>
+  <!-- Profile -->
+  <div class="profile-section">
+    <div class="avatar-frame">
+      <div class="avatar-ring"></div>
+      <img src="xa88.jpeg" alt="XFOR" class="avatar-img">
+    </div>
+    <h1 class="username">XFOR</h1>
+    <div class="user-tag">Pro Streamer</div>
+  </div>
+
+  <!-- Main Actions -->
+  <div class="stream-btns">
+    <!-- Kick Button -->
+    <a href="https://kick.com/XFORTV" target="_blank" class="action-btn btn-primary" style="color: #53fc18;">
+      <img src="https://cdn.simpleicons.org/kick/53FC18" alt="">
+      <span>Watch Live</span>
+    </a>
+    
+    <!-- TikTok Button (مكان YouTube) -->
+    <a href="https://www.tiktok.com/@xfor.ff" target="_blank" class="action-btn btn-primary" style="color: #ffffff;">
+      <img src="https://cdn.simpleicons.org/tiktok/FFFFFF" alt="">
+      <span>TikTok</span>
+    </a>
+
+    <!-- Support Button -->
+    <a href="#" class="action-btn btn-donate">
+      <img src="https://cdn.simpleicons.org/ko-fi/FF5E5B" alt="">
+      <span>Support the Stream</span>
+    </a>
+  </div>
+
+  <!-- Other Links -->
+  <div class="social-list">
+    <a href="https://www.youtube.com/@xfor.tiktok" target="_blank" class="social-item">
+      <img src="https://cdn.simpleicons.org/youtube/FF0000" alt=""> YouTube Channel
+    </a>
+    <a href="https://www.instagram.com/boubaker_karoui" target="_blank" class="social-item">
+      <img src="https://cdn.simpleicons.org/instagram/E4405F" alt=""> Instagram
+    </a>
+    <a href="https://discord.gg/FQzf4AME9" target="_blank" class="social-item">
+      <img src="https://cdn.simpleicons.org/discord/5865F2" alt=""> Join Discord Server
+    </a>
+  </div>
+
+  <!-- Footer Action -->
+  <div class="quran-footer">
+    <button class="btn-quran" onclick="playFatiha()">Play Surah Al-Fatiha</button>
+  </div>
+
+</div>
 
 <script>
-function playFatiha(){
-  const audio=document.getElementById("fatihaAudio");
-  audio.play();
-}
+  // --- 1. 3D Tilt Effect Logic (Desktop Only) ---
+  const card = document.getElementById('card');
+  const isMobile = window.matchMedia("(max-width: 600px)").matches;
 
-const sound=document.getElementById("hoverSound");
-document.querySelectorAll(".socials a").forEach(link=>{
-  link.addEventListener("mouseenter",()=>{
-    sound.currentTime=0;
-    sound.play();
+  if (!isMobile) {
+    // Only apply tilt on larger screens
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      // Calculate rotation (max 10 degrees)
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+  }
+
+  // --- 2. Sound Effects ---
+  const hoverSound = document.getElementById('hoverSound');
+  const btns = document.querySelectorAll('.action-btn, .social-item');
+  
+  btns.forEach(btn => {
+    // For Desktop
+    btn.addEventListener('mouseenter', () => {
+      if(hoverSound) {
+        hoverSound.currentTime = 0;
+        hoverSound.volume = 0.2;
+        hoverSound.play().catch(()=>{});
+      }
+    });
+    // For Mobile (Touch)
+    btn.addEventListener('touchstart', () => {
+       if(hoverSound) {
+        hoverSound.currentTime = 0;
+        hoverSound.volume = 0.2;
+        hoverSound.play().catch(()=>{});
+      }
+    }, {passive: true});
   });
-});
 
-const layer=document.getElementById("effects");
-for(let i=0;i<40;i++){
-  const s=document.createElement("div");
-  s.className="spark";
-  s.style.left=Math.random()*100+"%";
-  s.style.animationDelay=Math.random()*6+"s";
-  s.style.color=Math.random()>.5?"#00ffcc":"#7f00ff";
-  layer.appendChild(s);
-}
+  function playFatiha() {
+    const audio = document.getElementById("fatihaAudio");
+    if(audio) audio.play();
+  }
 </script>
 
 </body>
